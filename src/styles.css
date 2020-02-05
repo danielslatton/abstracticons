@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik:400,400i,700&display=swap');
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+html {
+  font-family: 'Rubik', sans-serif;
+}
+
+h1 {
+  @apply text-2xl font-bold;
+}
+
+h2 {
+  @apply text-xl;
+}
+
+h3 {
+  @apply text-lg;
+}
+
+a {
+  @apply text-blue-600 underline;
+}
+
+button {
+  @apply py-2 px-4;
+}
+
+.btn-primary {
+  @apply bg-black text-white;
+}
+
+.btn-secondary {
+  @apply bg-gray-300 text-black;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+  @apply opacity-75;
+}
