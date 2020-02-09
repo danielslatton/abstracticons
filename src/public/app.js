@@ -2,7 +2,7 @@ import {createHash} from 'crypto';
 import {comp, html, render} from 'hypersimple';
 import * as _ from './styles.css';
 import generateName from 'project-name-generator';
-import {abstracticon} from './abstracticons/src/abstracticon';
+import {abstracticon} from '../lib/abstracticon';
 
 const generate = (hash, shape) => {
 	const opts = {
