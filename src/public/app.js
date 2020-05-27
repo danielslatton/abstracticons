@@ -82,6 +82,14 @@ const Heading = comp(
 	`
 );
 
+const Footer = comp(
+  model => html`
+    <p>
+      <a href=${model.source}>github</a>
+    </p>
+    `
+);
+
 const App = comp(
 	model => html`
   <nav class="w-full max-w-5xl container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-2 lg:py-6">
@@ -102,6 +110,9 @@ const App = comp(
         <div class="ml-2">
           ${LinkButton(model.downloadLink)}
         </div>
+    </div>
+    <div class="flex w-full justify-around mt-8 text-black italic no-underline">
+      ${Footer(model.footer)}
     </div>
   </div>
 `
@@ -159,7 +170,10 @@ const createModel = () => {
 			},
 			variant: 'primary',
 			rounded: true
-		}
+    },
+    footer: {
+      source: "https://github.com/danielslatton/abstracticons",
+    }
 	};
 
 	return model;
