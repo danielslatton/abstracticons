@@ -1,5 +1,5 @@
-import {createWave} from './create-waves';
-import {createRadial} from './create-radial';
+import {createWave} from './shape-generators/create-waves';
+import {createRadial} from './shape-generators/create-radial';
 
 const shapeGenerators = {
 	wave: createWave,

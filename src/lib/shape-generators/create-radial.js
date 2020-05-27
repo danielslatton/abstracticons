@@ -1,5 +1,5 @@
 import {lineRadial, curveBasisClosed, curveCardinalClosed} from 'd3-shape';
-import {makePath, makeGroup} from './svg';
+import {makePath, makeGroup} from '../svg';
 
 const curves = [curveBasisClosed, curveCardinalClosed];
 

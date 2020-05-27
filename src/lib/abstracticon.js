@@ -13,7 +13,7 @@ const generatePalettefromHash = (hash, colors, count) => {
 	return palette;
 };
 
-export const abstracticon = (hash, opts) => {
+export const abstracticon = (hash, opts = {}) => {
 	if (typeof hash !== 'string' || hash.length < 35) {
 		throw new Error('hash must be least 35 characters');
 	}

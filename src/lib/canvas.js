@@ -39,5 +39,6 @@ export const createCanvas = (paths, opts = {}) => {
       </g>
     </g>
   </svg>`;
+
 	return svg;
 };

@@ -1,7 +1,7 @@
 import {scaleLinear} from 'd3-scale';
 import {area, curveBasis} from 'd3-shape';
 
-import {makePath, makeGroup} from './svg';
+import {makePath, makeGroup} from '../svg';
 
 export const createWave = (opts = {}) => {
 	const {complexity} = opts;

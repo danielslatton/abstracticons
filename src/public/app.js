@@ -1,8 +1,9 @@
 import {createHash} from 'crypto';
 import {comp, html, render} from 'hypersimple';
-import * as _ from './styles.css';
 import generateName from 'project-name-generator';
+import queryString from 'query-string';
 import {abstracticon} from '../lib/abstracticon';
+import * as _ from './styles.css';
 
 const generate = (hash, shape) => {
 	const opts = {
@@ -15,6 +16,14 @@ const createSha256 = string => {
 	return createHash('sha256')
 		.update(string)
 		.digest('hex');
+};
+
+export const setParam = (url, key, value) => {
+	const nURL = new URL(url);
+	const params = nURL.searchParams;
+	params.set(key, value);
+	nURL.search = params.toString();
+	return nURL.toString();
 };
 
 const Button = comp(
@@ -83,36 +92,45 @@ const Heading = comp(
 );
 
 const Footer = comp(
-  model => html`
-    <p>
-      <a href=${model.source}>github</a>
-    </p>
-    `
+	model => html`
+		<p>
+			made by
+			<a class="no-underline" href="https://www.danielslatton.com"
+				>daniel slatton
+			</a>
+		</p>
+		<p>
+			source available on
+			<a class="no-underline" href=${model.source}>github</a>
+		</p>
+	`
 );
 
 const App = comp(
 	model => html`
-  <nav class="w-full max-w-5xl container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-2 lg:py-6">
-    ${Heading(model.heading)}
-    <div class=max-w-sm>
-      ${Button(model.randomButton)}
+  <div class="flex flex-col min-h-screen">
+    <nav class="w-full max-w-5xl container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-2 lg:py-6">
+      ${Heading(model.heading)}
+      <div class=max-w-sm>
+        ${Button(model.randomButton)}
+        </div>
+    </nav>
+    <div class="w-full mb-auto container mx-auto flex flex-col flex-wrap items-center justify-between mt-0 px-2 py-2 lg:py-6">
+      <div class="my-4">
+        ${ButtonGroup(model.canvas)}
       </div>
-  </nav>
-  <div class="w-full container mx-auto flex flex-col flex-wrap items-center justify-between mt-0 px-2 py-2 lg:py-6">
-    <div class="my-4">
-      ${ButtonGroup(model.canvas)}
+      ${Canvas(model.canvas)}
+      <div class="flex w-2/5 items-center justify-around mt-4">
+          <div class=lg:w-3/5>
+            ${Input(model.stringInput)}
+          </div>
+          <div class="ml-2">
+            ${LinkButton(model.downloadLink)}
+          </div>
+      </div>
     </div>
-    ${Canvas(model.canvas)}
-    <div class="flex w-2/5 items-center justify-around mt-4">
-        <div class=lg:w-3/5>
-          ${Input(model.stringInput)}
-        </div>
-        <div class="ml-2">
-          ${LinkButton(model.downloadLink)}
-        </div>
-    </div>
-    <div class="flex w-full justify-around mt-8 text-black italic no-underline">
-      ${Footer(model.footer)}
+    <div class="flex h-full bg-gray-300 flex-col w-full justify-around mt-8 text-black italic items-center p-4">
+    ${Footer(model.footer)}
     </div>
   </div>
 `
@@ -129,8 +147,24 @@ const handleArtGeneration = model => {
 	model.downloadLink.fileName = `${model.stringInput.value}-${model.canvas.selectedShape}.svg`;
 };
 
+const setURL = value => {
+	window.history.pushState(
+		{},
+		'',
+		setParam(window.location.href, 'input', value)
+	);
+};
+
 const createModel = () => {
-	const initialWord = generateName({words: 3}).dashed;
+	let initialWord = generateName({words: 3}).dashed;
+
+	const params = queryString.parse(location.search);
+
+	if (params.input && params.input !== '') {
+		initialWord = params.input.slice(0, 100);
+	}
+
+	setURL(initialWord);
 	const initialArt = generate(createSha256(initialWord), 'square');
 	const initialHref = `data:image/svg+xml;base64,${btoa(initialArt)}`;
 
@@ -147,6 +181,7 @@ const createModel = () => {
 			placeholder: 'input a string!',
 			onInput(e) {
 				model.stringInput.value = e.target.value;
+				setURL(model.stringInput.value);
 				handleArtGeneration(model);
 			}
 		},
@@ -166,14 +201,15 @@ const createModel = () => {
 			text: 'random',
 			onclick() {
 				model.stringInput.value = generateName({words: 3}).dashed;
+				setURL(model.stringInput.value);
 				handleArtGeneration(model);
 			},
 			variant: 'primary',
 			rounded: true
-    },
-    footer: {
-      source: "https://github.com/danielslatton/abstracticons",
-    }
+		},
+		footer: {
+			source: 'https://github.com/danielslatton/abstracticons'
+		}
 	};
 
 	return model;
